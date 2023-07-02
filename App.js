@@ -1,20 +1,36 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import Feed from './components/Feed/Feed';
+import store from './store/store';
+import { Provider } from 'react-redux';
+import PostDetails from './components/PostDetails/PostDetails';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary';
+const Stack = createNativeStackNavigator();
+
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+      <Provider store={store}>
+        <ErrorBoundary fallback={'Something went wrong!'} >
+          <MyStack />
+        </ErrorBoundary>
+      </Provider>
+    </NavigationContainer>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+
+
+const MyStack = () => {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="Home"
+        component={Feed}
+        options={{ title: 'Feed' }}
+      />
+      <Stack.Screen name="Post" component={PostDetails} />
+    </Stack.Navigator>
+  );
+};
